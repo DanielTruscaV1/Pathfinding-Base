@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pathfindig-algorithms</title>
+        <link rel="stylesheet" href="cssEngine.css"/>
+        <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    </head>
+    <body>
+        <header>
+            <h1>Pathfindig-algoritms</h1>
+        </header>
+        <nav>
+            <ul>
+                <li id="current">LEE'S ALGORITHM</li>
+                <li>A*</li>
+                <li>BREADTH FIRST SEARCH</li>
+                <li>DEPTH FIRST SEARCH</li>
+                <li>DIJKSTRA'S ALGORITHM</li>
+            </ul>
+        </nav>
+        <main>
+            <img src="lee.jpg"/>
+            <p>The Lee algorithm is one possible solution for maze routing problems. It always gives an optimal solution, if one exists, but is slow and requires large memory for dense layout.Understanding how it works
+                The algorithm is a breadth-first based algorithm that uses queues to store the steps. It usually uses the following steps:
+            </p>
+            <ol>
+                <li>Choose a starting point and add it to the queue.</li>
+                <li>Add the valid neighboring cells to the queue.</li>
+                <li>Remove the position you are on from the queue and continue to the next element.</li>
+                <li>Repeat steps 2 and 3 until the queue is empty.</li>
+            </ol>
+            <div id="root">
+
+            </div>
+        </main>
+        <footer>
+            <ul>
+                <li>Cookies</li>
+                <li>Terms of use</li>
+                <li>Statistics</li>
+                <li>Mobile version</li>
+            </ul>
+        </footer>
+        <script type="text/babel">
+            function Table()
+            {
+                const matrix = [
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
+                ];
+                return matrix.map(r => {
+                    return ([r.map(c => {
+                        return <button id="but"> </button>
+                    }),
+                    <br/>
+                ])
+                })
+            }
+            ReactDOM.render(<Table/>, document.getElementById('root'));
+        </script>
+    </body>
+</html>
