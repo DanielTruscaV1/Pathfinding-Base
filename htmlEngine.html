@@ -31,6 +31,14 @@
                 <li>Remove the position you are on from the queue and continue to the next element.</li>
                 <li>Repeat steps 2 and 3 until the queue is empty.</li>
             </ol>
+            <div id="buttons">
+                <button id="startButton" onclick="selectStart()">START</button>
+                <button id="finishButton" onclick="selectFinish()">FINISH</button>
+                <button id="wallButton" onclick="selectWall()">WALL</button>
+                <button id="runButton">RUN</button>
+                <button id="stopButton">STOP</button>
+                <button id="resetButton">RESET</button>
+            </div>
             <div id="root">
 
             </div>
@@ -44,6 +52,67 @@
             </ul>
         </footer>
         <script type="text/babel">
+            var start = false, finish = false, wall = false;
+            function selectStart()
+            {
+                start = true;
+                finish = false;
+                wall = false;
+            }
+            function selectFinish()
+            {
+                start = false;
+                finish = true;
+                wall = false;
+            }
+            function selectWall()
+            {
+                start = false;
+                finish = false;
+                wall = true;
+            }
+            var previous1 = null, previous2 = null;
+            function handleClick(e)
+            {
+                e.preventDefault();
+                if(start === true)
+                {
+                    if(previous1 != null)
+                        previous1.style.backgroundColor = "white";
+                    e.target.style.backgroundColor = "yellowgreen";
+                    start = false;
+                    previous1 = e.target;
+                }
+                else if(finish === true)
+                {
+                    if(previous2 != null)
+                        previous2.style.backgroundColor = "white";
+                    e.target.style.backgroundColor = "red";
+                    finish = false;
+                    previous2 = e.target;
+                }
+                else if(wall === true)
+                    e.target.style.backgroundColor = "black";
+            }
+            var previousStart = null, previousFinish = null;
+            function handleMouseOver(e)
+            {
+                e.preventDefault();
+                if(start === true)
+                {
+                    if(previousStart != null)
+                        previousStart.style.backgroundColor = "white";
+                    e.target.style.backgroundColor = "yellowgreen";
+                    previousStart = e.target;
+                }
+                else if(finish === true)
+                {
+                    if(previousFinish != null)
+                        previousFinish.style.backgroundColor = "white";
+                    e.target.style.backgroundColor = "red";
+                    previousFinish = e.target;
+                }
+            }
             function Table()
             {
                 const matrix = [
@@ -68,11 +137,16 @@
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
                 ];
+                var color = "green";
+                var i = 0;
                 return matrix.map(r => {
+                    i++;
+                    var j = 0;
                     return ([r.map(c => {
-                        return <button id="but"> </button>
+                        j++;
+                        return <button id={"id"+(i*10+j)} onClick={handleClick} onMouseOver={handleMouseOver}></button>
                     }),
-                    <br/>
+                    <br/>,
                 ])
                 })
             }

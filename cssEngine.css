@@ -84,14 +84,43 @@ main table
     left: 10%;
     right: 10%;
 }
-#but
+#root button
 {
     width: 35px;
     height: 35px;
     background-color:white;
     border:1px solid black;
+    cursor:pointer;
 }
-#but:hover
+#root button:hover
 {
+    background-color:rgb(200, 200, 200);
+}
+#buttons button
+{
+    width:70px;
+    height:25px;
+    font-size:100%;
+    margin:10px;
+    color:white;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+#startButton
+{
+    background-color:greenyellow;
+}
+#finishButton
+{
+    background-color:red;
+}
+#wallButton
+{
+    background-color:black;
+}
+#runButton, #stopButton, #resetButton
+{
+    color:black !important;
     background-color:rgb(200, 200, 200);
 }
