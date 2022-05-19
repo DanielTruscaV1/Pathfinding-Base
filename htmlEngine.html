@@ -37,7 +37,7 @@
                 <button id="wallButton" onclick="selectWall()">WALL</button>
                 <button id="runButton">RUN</button>
                 <button id="stopButton">STOP</button>
-                <button id="resetButton">RESET</button>
+                <button id="resetButton" onclick="reset()">RESET</button>
             </div>
             <div id="root">
 
@@ -70,6 +70,16 @@
                 start = false;
                 finish = false;
                 wall = true;
+            }
+            function reset()
+            {
+                for(var i = 1;i <= 20;i++)
+                    for(var j = 1;j <= 20;j++)
+                    {   
+                        console.log("id"+(i*10+j));
+                        var button = document.getElementById("id"+i/10+i%10+j/10+j%10);
+                        button.style.backgroundColor = "white";
+                    }
             }
             var previous1 = null, previous2 = null;
             function handleClick(e)
@@ -113,9 +123,7 @@
                     previousFinish = e.target;
                 }
             }
-            function Table()
-            {
-                const matrix = [
+            const matrix = [
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
@@ -137,6 +145,8 @@
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
                 ];
+            function Table()
+            {
                 var color = "green";
                 var i = 0;
                 return matrix.map(r => {
@@ -144,7 +154,7 @@
                     var j = 0;
                     return ([r.map(c => {
                         j++;
-                        return <button id={"id"+(i*10+j)} onClick={handleClick} onMouseOver={handleMouseOver}></button>
+                        return <button id={"id"+i/10+i%10+j/10+j%10} onClick={handleClick} onMouseOver={handleMouseOver}></button>
                     }),
                     <br/>,
                 ])
