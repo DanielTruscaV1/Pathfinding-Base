@@ -124,3 +124,51 @@ main table
     color:black !important;
     background-color:rgb(200, 200, 200);
 }
+@keyframes anGreen
+{
+    from
+    {
+        background-color: yellow;
+        border-radius: 50% 50%;
+        transform:  scale(0.2);
+    }
+
+    to 
+    {
+        background-color:yellowgreen;
+        border-radius: 0% 0%;
+        transform:  scale(1);
+    }
+}
+@keyframes anRed
+{
+    from
+    {
+        background-color: yellow;
+        border-radius: 50% 50%;
+        transform:  scale(0.2);
+    }
+
+    to 
+    {
+        background-color:red;
+        border-radius: 0% 0%;
+        transform:  scale(1);
+    }
+}
+@keyframes anBlack
+{
+    from
+    {
+        background-color: yellow;
+        border-radius: 50% 50%;
+        transform:  scale(0.2);
+    }
+
+    to 
+    {
+        background-color:black;
+        border-radius: 0% 0%;
+        transform:  scale(1);
+    }
+}
