@@ -36,7 +36,8 @@
                 <button id="finishButton" onclick="selectFinish()">FINISH</button>
                 <button id="wallButton" onclick="selectWall()">WALL</button>
                 <button id="runButton" onclick="run()">RUN</button>
-                <button id="stopButton">STOP</button>
+                <button id="stopButton" onclick="stop()">STOP</button>
+                <button id ="resumeButton" onclick="resume()">RESUME</button>
                 <button id="resetButton" onclick="reset()">RESET</button>
             </div>
             <div id="root">
@@ -52,16 +53,17 @@
             </ul>
         </footer>
         <script type="text/babel">
-            var start = false, finish = false, wall = false, hasStart = false, hasFinish = false, isRun = false;
+            var start = false, finish = false, wall = false, hasStart = false, hasFinish = false, isRun = false, isReset = false, isStop = false, isResume = false;
             
             function wait(ms)
              {
-                 return new Promise((resolve, reject) => {
+                 var wai = new Promise((resolve, reject) => {
                     setTimeout(() => {
-                    console.log("Done waiting");
                     resolve(ms)
                   }, ms )
                 })
+
+                return wai;
               }
             
             function selectStart()
@@ -84,9 +86,13 @@
             }
             function reset()
             {
+
                 isRun = false;
                 hasStart = false;
                 hasFinish = false;
+                isStop = false;
+                isResume = false;
+                isReset = true;
                 for(var i = 3;i <= 18;i++)
                     for(var j = 3;j <= 18;j++)
                     {   
@@ -97,16 +103,27 @@
                         matrix[i][j] = 0;
                     }
             }
+            function resume()
+            {
+                isResume = true;
+                isStop = false;
+            }
+            async function stop()
+            {
+                isStop = true;
+                isResume = false;
+            }
+
             var previous1 = null, previous2 = null;
             function handleClick(e)
             {
                 e.preventDefault();
                 var n = parseInt(e.target.id[2]) * 10 + parseInt(e.target.id[3]);
                 var m = parseInt(e.target.id[4]) * 10 + parseInt(e.target.id[5]);
-                if (n != 1 && n != 2 && n != 19 && n != 20 && m != 1 && m != 2 && m != 19 && m != 20 && isRun == false)
+                if (n != 1 && n != 2 && n != 19 && n != 20 && m != 1 && m != 2 && m != 19 && m != 20 && (isRun === false || isStop ===true) && matrix[n][m] != -3 && matrix[n][m] != -2 && matrix[n][m] != 1)
                 {
 
-                if(start === true)
+                if(start === true && isRun === false)
                 {
                     if(previous1 != null)
                     {
@@ -162,9 +179,9 @@
                 e.preventDefault();
                 var n = parseInt(e.target.id[2]) * 10 + parseInt(e.target.id[3]);
                 var m = parseInt(e.target.id[4]) * 10 + parseInt(e.target.id[5]);
-                if (n != 1 && n != 2 && n != 19 && n != 20 && m != 1 && m != 2 && m != 19 && m != 20 && isRun == false) 
+                if (n != 1 && n != 2 && n != 19 && n != 20 && m != 1 && m != 2 && m != 19 && m != 20 && (isRun === false || isStop === true )) 
                 {
-                if(start === true && e.target.style.backgroundColor != "black" && e.target.style.backgroundColor != "yellow")
+                if(start === true && e.target.style.backgroundColor != "black" && e.target.style.backgroundColor != "yellow" && isRun === false)
                 {
                     if(previousStart != null)
                         previousStart.style.backgroundColor = "white";
@@ -220,8 +237,27 @@
             
             async function Lee(iStart, jStart)
             {
+
                 for(var d = 0; d < 4;d++)
                 {
+
+                    if (isReset === true)
+                {
+                    return;
+                    // Dupa ce se apasa reset, cateva chemari ale functiei inca sunt in stiva, if-ul asta are scopul de a iesi fortat din ele.
+                }
+
+                if (isStop === true)
+                {
+                    while (isResume === false && isReset === false)
+                    await wait(1);
+
+                    if (isReset === true)
+                   {
+                       return;
+                   }
+                    // Cat timp nu este apasat resume sau reset, se asteapta 1 ms(atat de putin ca sa permita sa se apese butonul reset/ resume)
+                }
 
                     var iNou = iStart+di[d];
                     var jNou = jStart+dj[d];
@@ -230,11 +266,15 @@
                     {
                         matrix[iNou][jNou] = 1;
                         var button = document.getElementById("id"+parseInt(iNou/10)+iNou%10+parseInt(jNou/10)+jNou%10);
-                        button.style.backgroundColor = "yellow";
+                        
+                        button.style.animationName = "anYellow";
+                        button.style.animationDuration = "0.5s";
+                        button.style.animationFillMode = "forwards";
 
                         await wait(500);
 
                             Lee(iNou, jNou);
+
                     }
                 }
             }
@@ -275,6 +315,9 @@
             
             function run()
             {
+                if (isReset === true)
+                isReset = false;
+
                 if(hasStart === false)
                     alert("No starting position selected!");
                 else if(hasFinish === false)
@@ -293,6 +336,7 @@
                         }
 
                   Lee(iStart, jStart);
+
                 } 
 
             }
