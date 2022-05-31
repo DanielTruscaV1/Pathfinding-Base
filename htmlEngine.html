@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Pathfindig-algorithms</title>
+        <title>Pathfinding-algorithms</title>
         <link rel="stylesheet" href="cssEngine.css"/>
         <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
         <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
@@ -9,7 +9,7 @@
     </head>
     <body>
         <header>
-            <h1>Pathfindig-algoritms</h1>
+            <h1>Pathfinding-algorithms</h1>
         </header>
         <nav>
             <ul>
@@ -52,7 +52,18 @@
             </ul>
         </footer>
         <script type="text/babel">
-            var start = false, finish = false, wall = false, hasStart = false, hasFinish = false;
+            var start = false, finish = false, wall = false, hasStart = false, hasFinish = false, isRun = false;
+            
+            function wait(ms)
+             {
+                 return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                    console.log("Done waiting");
+                    resolve(ms)
+                  }, ms )
+                })
+              }
+            
             function selectStart()
             {
                 start = true;
@@ -73,8 +84,11 @@
             }
             function reset()
             {
-                for(var i = 1;i <= 20;i++)
-                    for(var j = 1;j <= 20;j++)
+                isRun = false;
+                hasStart = false;
+                hasFinish = false;
+                for(var i = 3;i <= 18;i++)
+                    for(var j = 3;j <= 18;j++)
                     {   
                         console.log("id"+(i*10+j));
                         var button = document.getElementById("id"+parseInt(i/10)+i%10+parseInt(j/10)+j%10);
@@ -87,6 +101,11 @@
             function handleClick(e)
             {
                 e.preventDefault();
+                var n = parseInt(e.target.id[2]) * 10 + parseInt(e.target.id[3]);
+                var m = parseInt(e.target.id[4]) * 10 + parseInt(e.target.id[5]);
+                if (n != 1 && n != 2 && n != 19 && n != 20 && m != 1 && m != 2 && m != 19 && m != 20 && isRun == false)
+                {
+
                 if(start === true)
                 {
                     if(previous1 != null)
@@ -134,11 +153,17 @@
                     var j = parseInt(e.target.id[4])*10+parseInt(e.target.id[5]);
                     matrix[i][j] = -1;
                 }
+
+                }
             }
             var previousStart = null, previousFinish = null, previousWall = null;
             function handleMouseOver(e)
             {
                 e.preventDefault();
+                var n = parseInt(e.target.id[2]) * 10 + parseInt(e.target.id[3]);
+                var m = parseInt(e.target.id[4]) * 10 + parseInt(e.target.id[5]);
+                if (n != 1 && n != 2 && n != 19 && n != 20 && m != 1 && m != 2 && m != 19 && m != 20 && isRun == false) 
+                {
                 if(start === true && e.target.style.backgroundColor != "black" && e.target.style.backgroundColor != "yellow")
                 {
                     if(previousStart != null)
@@ -160,45 +185,119 @@
                     e.target.style.backgroundColor = "black";
                     previousWall = e.target;
                 }
+
+                }
             }
+
             const di = [-1, 0, 0, 1], dj = [0, 1, -1, 0];
             function inMatrix(i, j)
             {
-                return (i >= 1 && i <= 20 && j >= 1 && j <= 20);
+                return (i >= 3 && i <= 18 && j >= 3 && j <= 18);
             }
-            function Lee(iStart, jStart)
+
+            var queue = [], len = 0;
+
+            function pop()
             {
-                for(var d = 0;d < 4;d++)
+                for (var i = 1; i < len; i++)
+                queue[i] = queue[i + 1];
+                len--;
+
+                for (var i = 1; i < len; i++)
+                queue[i] = queue[i + 1];
+                len--;
+            }
+
+            function push(element1, element2)
+            {
+                len++;
+                queue[len] = element1;
+
+                len++;
+                queue[len] = element2;
+            }
+            
+            
+            async function Lee(iStart, jStart)
+            {
+                for(var d = 0; d < 4;d++)
                 {
+
                     var iNou = iStart+di[d];
                     var jNou = jStart+dj[d];
+
                     if(inMatrix(iNou, jNou) && matrix[iNou][jNou] === 0)
                     {
                         matrix[iNou][jNou] = 1;
                         var button = document.getElementById("id"+parseInt(iNou/10)+iNou%10+parseInt(jNou/10)+jNou%10);
                         button.style.backgroundColor = "yellow";
-                        Lee(iNou, jNou);
+
+                        await wait(500);
+
+                            Lee(iNou, jNou);
                     }
                 }
             }
+            
+            
+
+            /*
+            async function Lee(iStart, jStart)
+            {
+                matrix[iStart][jStart] = 1;
+                push(iStart, jStart);
+
+                while(len != 0)
+                {   
+                            var i1 = queue[1];
+                            var j1 = queue[2];
+                         for(var k = 0; k <= 3; k++)
+                             {
+
+                                 var ino = i1 + di[k];
+                                 var jn = j1 + dj[k];
+
+                                 if(inMatrix(ino, jn) && matrix[ino][jn] == 0)
+                                    {
+                                        await wait(500);
+
+                                         matrix[ino][jn] = matrix[i1][j1] + 1;
+                                            var button = document.getElementById("id"+parseInt(ino/10)+ino%10+parseInt(jn/10)+jn%10);
+                                            button.style.backgroundColor = "yellow";
+                                             push(ino, jn);
+                                    }
+                             }
+                     pop();
+                 }
+            }
+            */
+            
+            
             function run()
             {
                 if(hasStart === false)
                     alert("No starting position selected!");
                 else if(hasFinish === false)
                     alert("No finish position selected!");
-                var iStart, jStart, stop = false;
-                for(var i = 0;i < 20 && stop === false;i++)
-                    for(var j = 0;j < 20 && stop === false;j++)
+                else 
+                {
+                    isRun = true;
+                 var iStart, jStart, stop = false;
+                 for(var i = 3;i <= 18 && stop === false;i++)
+                    for(var j = 3;j <= 18 && stop === false;j++)
                         if(matrix[i][j] === -3)
                         {
                             iStart = i;
                             jStart = j;
                             stop = true;
                         }
-                Lee(iStart, jStart);
+
+                  Lee(iStart, jStart);
+                } 
+
             }
             const matrix = [
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
@@ -235,6 +334,54 @@
                 })
             }
             ReactDOM.render(<Table/>, document.getElementById('root'));
+
+            for (var j = 1; j <= 20; j++)
+            {
+                var button = document.getElementById("id"+parseInt(1/10)+1%10+parseInt(j/10)+j%10);
+                button.style.backgroundColor = "black";
+            }
+
+            for (var j = 1; j <= 20; j++)
+            {
+                var button = document.getElementById("id"+parseInt(20/10)+20%10+parseInt(j/10)+j%10);
+                button.style.backgroundColor = "black";
+            }
+
+            for (var j = 1; j <= 20; j++)
+            {
+                var button = document.getElementById("id"+parseInt(2/10)+2%10+parseInt(j/10)+j%10);
+                button.style.backgroundColor = "black";
+            }
+
+            for (var j = 1; j <= 20; j++)
+            {
+                var button = document.getElementById("id"+parseInt(19/10)+19%10+parseInt(j/10)+j%10);
+                button.style.backgroundColor = "black";
+            }
+
+            for (var i = 1; i <= 20; i++)
+            {
+                var button = document.getElementById("id"+parseInt(i/10)+i%10+parseInt(1/10)+1%10);
+                button.style.backgroundColor = "black";
+            }
+
+            for (var i = 1; i <= 20; i++)
+            {
+                var button = document.getElementById("id"+parseInt(i/10)+i%10+parseInt(2/10)+2%10);
+                button.style.backgroundColor = "black";
+            }
+
+            for (var i = 1; i <= 20; i++)
+            {
+                var button = document.getElementById("id"+parseInt(i/10)+i%10+parseInt(19/10)+19%10);
+                button.style.backgroundColor = "black";
+            }
+
+            for (var i = 1; i <= 20; i++)
+            {
+                var button = document.getElementById("id"+parseInt(i/10)+i%10+parseInt(20/10)+20%10);
+                button.style.backgroundColor = "black";
+            }
         </script>
     </body>
 </html>
