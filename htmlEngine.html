@@ -166,21 +166,74 @@
             {
                 return (i >= 1 && i <= 20 && j >= 1 && j <= 20);
             }
+
+            var queue = [], len = 0;
+
+            function pop()
+            {
+                for (var i = 1; i < len; i++)
+                queue[i] = queue[i + 1];
+                len--;
+
+                for (var i = 1; i < len; i++)
+                queue[i] = queue[i + 1];
+                len--;
+            }
+
+            function push(element1, element2)
+            {
+                len++;
+                queue[len] = element1;
+
+                len++;
+                queue[len] = element2;
+            }
             function Lee(iStart, jStart)
             {
                 for(var d = 0;d < 4;d++)
                 {
                     var iNou = iStart+di[d];
                     var jNou = jStart+dj[d];
-                    if(inMatrix(iNou, jNou) && matrix[iNou][jNou] === 0)
+                    if(inMatrix(iNou, jNou) === true && matrix[iNou][jNou] === 0)
                     {
                         matrix[iNou][jNou] = 1;
                         var button = document.getElementById("id"+parseInt(iNou/10)+iNou%10+parseInt(jNou/10)+jNou%10);
                         button.style.backgroundColor = "yellow";
                         Lee(iNou, jNou);
+                        console.log(iNou + " " + jNou);
                     }
                 }
             }
+            /*
+            function Lee(iStart, jStart)
+            {
+                matrix[iStart][jStart] = 1;
+                push(iStart, jStart);
+
+                while(len != 0)
+                {   
+                        var i1 = queue[1];
+                        var j1 = queue[2];
+                         for(var k = 0; k <= 3; k++)
+                             {
+                                 var ino = i1 + di[k];
+                                 var jn = j1 + dj[k];
+
+                                 if(inMatrix(ino, jn) && matrix[ino][jn] == 0)
+                                    {
+                                         matrix[ino][jn] = matrix[i1][j1] + 1;
+                                         var button = document.getElementById("id"+parseInt(ino/10)+ino%10+parseInt(jn/10)+jn%10);
+                                         button.style.backgroundColor = "yellow";
+                                         push(ino, jn);
+                                         sleep(1000);
+                                    }
+                             }
+                    setTimeout(() => {
+                        pop();
+                    })
+                 }
+            }
+            */
             function run()
             {
                 if(hasStart === false)
@@ -198,27 +251,7 @@
                         }
                 Lee(iStart, jStart);
             }
-            const matrix = [
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0 ,0 ,0],
-                ];
+            const matrix = new Array(20).fill(0).map(() => new Array(20).fill(0));
             function Table()
             {
                 var color = "green";
