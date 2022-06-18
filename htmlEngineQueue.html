@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Pathfinding-algorithms</title>
-        <link rel="stylesheet" href="cssEngine.css"/>
+        <link rel="stylesheet" href="cssEngineQueue.css"/>
         <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
         <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -13,11 +13,11 @@
         </header>
         <nav>
             <ul>
-                <li id="current">LEE'S ALGORITHM(RECURRENT)</li>
-                <li>A*</li>
                 <li>
-                    <a href = "file:///C:/Users/andre/OneDrive/Desktop/Pathfinding/htmlEngineQueue.html">BREADTH FIRST SEARCH</a>
-                    </li>
+                    <a href ="file:///C:/Users/andre/OneDrive/Desktop/Pathfinding/htmlEngine.html">LEE'S ALGORITHM(RECURRENT)</a>
+                </li>
+                <li>A*</li>
+                <li id="current">BREADTH FIRST SEARCH</li>
                 <li>DEPTH FIRST SEARCH</li>
                 <li>DIJKSTRA'S ALGORITHM</li>
             </ul>
@@ -98,6 +98,12 @@
                 isStop = false;
                 isResume = false;
                 isReset = true;
+
+                await wait(200);
+
+                while (len > 0)
+                pop();
+
                 for(var i = 3; i <= 18;i++)
                     for(var j = 3;j <= 18;j++)
                     {   
@@ -220,10 +226,31 @@
             }
 
             const di = [-1, 0, 0, 1], dj = [0, 1, -1, 0];
-
             function inMatrix(i, j)
             {
                 return (i >= 3 && i <= 18 && j >= 3 && j <= 18);
+            }
+
+            var queue = [], len = 0;
+
+            function pop()
+            {
+                for (var i = 1; i < len; i++)
+                queue[i] = queue[i + 1];
+                len--;
+
+                for (var i = 1; i < len; i++)
+                queue[i] = queue[i + 1];
+                len--;
+            }
+
+            function push(element1, element2)
+            {
+                len++;
+                queue[len] = element1;
+
+                len++;
+                queue[len] = element2;
             }
             
             async function path(i1, j1)
@@ -254,7 +281,7 @@
                 }
             }
             
-            
+            /*
             async function Lee(iStart, jStart)
             {
 
@@ -296,7 +323,7 @@
 
                     if(inMatrix(iNou, jNou) && matrix[iNou][jNou] === 0)
                     {
-                        matrix[iNou][jNou] = matrix[iStart][jStart] + 1;
+                        matrix[iNou][jNou] = matrix[iStart][jStart] = 1;
 
                         var button = document.getElementById("id"+parseInt(iNou/10)+iNou%10+parseInt(jNou/10)+jNou%10);
                         
@@ -307,10 +334,87 @@
                         await wait(500);
 
                             Lee(iNou, jNou);
+                            /*
+                            document.open();
+
+                            for(let i = 3; i <= 18; i++)
+                            for (let j = 3; j <= 18; j++)
+                            document.write(matrix[i][j] + " ");
                             
+
                     }
                 }
-            }         
+            }      
+
+        */
+
+            
+            async function Lee(iStart, jStart)
+            {
+                matrix[iStart][jStart] = 1;
+                push(iStart, jStart);
+
+                while(len != 0)
+                {   
+
+                    if (isReset === true)
+                {
+                        return;
+                    // Dupa ce se apasa reset, cateva chemari ale functiei inca sunt in stiva, if-ul asta are scopul de a iesi fortat din ele.
+                }
+
+                if (isStop === true)
+                {
+                    while (isResume === false && isReset === false)
+                    await wait(1);
+
+                    if (isReset === true)
+                   {
+                       return;
+                   }
+                    // Cat timp nu este apasat resume sau reset, se asteapta 1 ms(atat de putin ca sa permita sa se apese butonul reset/ resume)
+                }
+
+                if (isFinished === true)
+                {
+                    return;
+                }
+                            var i1 = queue[1];
+                            var j1 = queue[2];
+                         for(var k = 0; k <= 3; k++)
+                             {
+
+                                 var ino = i1 + di[k];
+                                 var jn = j1 + dj[k];
+
+                                 if (matrix[ino][jn] == -2)
+                                    {
+                                        isFinished = true;
+                                        matrix[ino][jn] = matrix[i1][j1] + 1;
+                                        path(iFinal, jFinal);
+                                    }
+
+                                 if(inMatrix(ino, jn) && matrix[ino][jn] == 0)
+                                    {
+
+                                        var button = document.getElementById("id"+parseInt(ino/10)+ino%10+parseInt(jn/10)+jn%10);
+
+                                        button.style.animationName = "anYellow";
+                                        button.style.animationDuration = "0.5s";
+                                        button.style.animationFillMode = "forwards";
+
+                                         matrix[ino][jn] = matrix[i1][j1] + 1;
+                                        
+                                             push(ino, jn);
+                                            
+                                             await wait(100);
+                                    }
+                             }
+                     pop();
+                 }
+            }
+            
+            
             
             function run()
             {
