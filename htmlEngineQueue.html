@@ -14,7 +14,7 @@
         <nav>
             <ul>
                 <li>
-                    <a href ="file:///C:/Users/andre/OneDrive/Desktop/Pathfinding/htmlEngine.html">LEE'S ALGORITHM(RECURRENT)</a>
+                    <a href ="file:///C:\Users\andre\Desktop\Pathfinding/htmlEngine.html">LEE'S ALGORITHM(RECURRENT)</a>
                 </li>
                 <li>A*</li>
                 <li id="current">BREADTH FIRST SEARCH</li>
@@ -107,7 +107,7 @@
                 for(var i = 3; i <= 18;i++)
                     for(var j = 3;j <= 18;j++)
                     {   
-                        console.log("id"+(i*10+j));
+                       // console.log("id"+(i*10+j));
                         var button = document.getElementById("id"+parseInt(i/10)+i%10+parseInt(j/10)+j%10);
                         button.style.animationName = "";
                         button.style.backgroundColor = "white";
@@ -126,15 +126,30 @@
             }
 
             var previous1 = null, previous2 = null;
+            var isHold = false;
 
             function handleClick(e)
             {
-                e.preventDefault();
+                /*e.preventDefault();
+                if (wall == true)
+                    {
+                        if (isHold == false)
+                            isHold = true
+                        else if (isHold == true)
+                            isHold = false;
+
+                        e.target.style.animationName = "anBlack";
+                        e.target.style.animationDuration = "1s";
+                        e.target.style.animationFillMode = "forwards";
+                        var i = parseInt(e.target.id[2])*10+parseInt(e.target.id[3]);
+                        var j = parseInt(e.target.id[4])*10+parseInt(e.target.id[5]);
+                        matrix[i][j] = -1;
+                    }
+                    */
                 var n = parseInt(e.target.id[2]) * 10 + parseInt(e.target.id[3]);
                 var m = parseInt(e.target.id[4]) * 10 + parseInt(e.target.id[5]);
                 if (n != 1 && n != 2 && n != 19 && n != 20 && m != 1 && m != 2 && m != 19 && m != 20 && (isRun === false || isStop ===true) && matrix[n][m] == 0)
                 {
-
                 if(start === true && isRun === false)
                 {
                     if(previous1 != null)
@@ -175,7 +190,7 @@
                     jFinal = j;
                     previous2 = e.target;
                 }
-                else if(wall === true)
+                /*else if(wall === true)
                 {
                     e.target.style.animationName = "anBlack";
                     e.target.style.animationDuration = "1s";
@@ -183,11 +198,34 @@
                     var i = parseInt(e.target.id[2])*10+parseInt(e.target.id[3]);
                     var j = parseInt(e.target.id[4])*10+parseInt(e.target.id[5]);
                     matrix[i][j] = -1;
-                }
+                }*/
 
                 }
             }
             var previousStart = null, previousFinish = null, previousWall = null;
+
+            function handleMouseDown(e)
+            {
+                if (wall == true)
+                {
+                    isHold = true;
+                    
+                    e.target.style.animationName = "anBlack";
+                    e.target.style.animationDuration = "1s";
+                    e.target.style.animationFillMode = "forwards";
+                    var i = parseInt(e.target.id[2])*10+parseInt(e.target.id[3]);
+                    var j = parseInt(e.target.id[4])*10+parseInt(e.target.id[5]);
+                    matrix[i][j] = -1;
+                }
+                else 
+                isHold = false;
+            }
+
+            function handleMouseUp(e)
+            {
+                isHold = false;
+            }
+
             function handleMouseOver(e)
             {
                 e.preventDefault();
@@ -195,6 +233,28 @@
                 var m = parseInt(e.target.id[4]) * 10 + parseInt(e.target.id[5]);
                 if (n != 1 && n != 2 && n != 19 && n != 20 && m != 1 && m != 2 && m != 19 && m != 20 && (isRun === false || isStop === true )) 
                 {
+                            var i = parseInt(e.target.id[2])*10+parseInt(e.target.id[3]);
+                            var j = parseInt(e.target.id[4])*10+parseInt(e.target.id[5]);
+
+                    if (wall === true && matrix[i][j] == 0)
+                    {
+                        if (isHold === true)
+                        {
+                            e.target.style.animationName = "anBlack";
+                            e.target.style.animationDuration = "1s";
+                            e.target.style.animationFillMode = "forwards";
+                            var i = parseInt(e.target.id[2])*10+parseInt(e.target.id[3]);
+                            var j = parseInt(e.target.id[4])*10+parseInt(e.target.id[5]);
+                            matrix[i][j] = -1;
+                        }
+                        else if (isHold === false)
+                        {
+                            if(previousWall != null)
+                                previousWall.style.backgroundColor = "white";
+                            e.target.style.backgroundColor = "black";
+                            previousWall = e.target;
+                        }
+                    }
                 if(start === true && e.target.style.backgroundColor != "black" && e.target.style.backgroundColor != "yellow" && isRun === false)
                 {
                     if(previousStart != null)
@@ -214,13 +274,14 @@
                     e.target.style.backgroundColor = "red";
                     previousFinish = e.target;
                 }
-                else if(wall === true && e.target.style.backgroundColor != "black" && e.target.style.backgroundColor != "yellow")
+                /*else if(wall === true && e.target.style.backgroundColor != "black" && e.target.style.backgroundColor != "yellow")
                 {
                     if(previousWall != null)
                         previousWall.style.backgroundColor = "white";
                     e.target.style.backgroundColor = "black";
                     previousWall = e.target;
                 }
+                */
 
                 }
             }
@@ -280,73 +341,6 @@
 
                 }
             }
-            
-            /*
-            async function Lee(iStart, jStart)
-            {
-
-                for(var d = 0; d < 4; d++)
-                {
-
-                    if (isReset === true)
-                {
-                    return;
-                    // Dupa ce se apasa reset, cateva chemari ale functiei inca sunt in stiva, if-ul asta are scopul de a iesi fortat din ele.
-                }
-
-                if (isStop === true)
-                {
-                    while (isResume === false && isReset === false)
-                    await wait(1);
-
-                    if (isReset === true)
-                   {
-                       return;
-                   }
-                    // Cat timp nu este apasat resume sau reset, se asteapta 1 ms(atat de putin ca sa permita sa se apese butonul reset/ resume)
-                }
-
-                if (isFinished === true)
-                {
-                    return;
-                }
-
-                    var iNou = iStart+di[d];
-                    var jNou = jStart+dj[d];
-
-                    if (matrix[iNou][jNou] == -2)
-                    {
-                        isFinished = true;
-                        matrix[iNou][jNou] = matrix[iStart][jStart] + 1;
-                        path(iFinal, jFinal);
-                    }
-
-                    if(inMatrix(iNou, jNou) && matrix[iNou][jNou] === 0)
-                    {
-                        matrix[iNou][jNou] = matrix[iStart][jStart] = 1;
-
-                        var button = document.getElementById("id"+parseInt(iNou/10)+iNou%10+parseInt(jNou/10)+jNou%10);
-                        
-                        button.style.animationName = "anYellow";
-                        button.style.animationDuration = "0.5s";
-                        button.style.animationFillMode = "forwards";
-
-                        await wait(500);
-
-                            Lee(iNou, jNou);
-                            /*
-                            document.open();
-
-                            for(let i = 3; i <= 18; i++)
-                            for (let j = 3; j <= 18; j++)
-                            document.write(matrix[i][j] + " ");
-                            
-
-                    }
-                }
-            }      
-
-        */
 
             
             async function Lee(iStart, jStart)
@@ -476,7 +470,7 @@
                     var j = 0;
                     return ([r.map(c => {
                         j++;
-                        return <button id={"id"+parseInt(i/10)+i%10+parseInt(j/10)+j%10} onClick={handleClick} onMouseOver={handleMouseOver}></button>
+                       return <button id={"id"+parseInt(i/10)+i%10+parseInt(j/10)+j%10} onClick={handleClick} onMouseOver={handleMouseOver} onMouseDown = {handleMouseDown} onMouseUp = {handleMouseUp}></button>
                     }),
                     <br/>,
                 ])

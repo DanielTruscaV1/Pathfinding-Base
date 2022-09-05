@@ -99,8 +99,10 @@ main table
     height: 35px;
     background-color:white;
     border:1px solid black;
+    margin: 0px;
     cursor:pointer;
 }
+
 #root button:hover
 {
     background-color:rgb(200, 200, 200);

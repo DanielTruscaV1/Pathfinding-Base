@@ -16,8 +16,8 @@
                 <li id="current">LEE'S ALGORITHM(RECURRENT)</li>
                 <li>A*</li>
                 <li>
-                    <a href = "file:///C:/Users/andre/OneDrive/Desktop/Pathfinding/htmlEngineQueue.html">BREADTH FIRST SEARCH</a>
-                    </li>
+                    <a href = "file:///C:\Users\andre\Desktop\Pathfinding/htmlEngineQueue.html">BREADTH FIRST SEARCH</a>
+                </li>
                 <li>DEPTH FIRST SEARCH</li>
                 <li>DIJKSTRA'S ALGORITHM</li>
             </ul>
@@ -120,15 +120,31 @@
             }
 
             var previous1 = null, previous2 = null;
-
+            var isHold = false;
+            
             function handleClick(e)
             {
                 e.preventDefault();
+                /*if (wall == true)
+                    {
+                        if (isHold == false)
+                            isHold = true
+                        else if (isHold == true)
+                            isHold = false;
+
+                        e.target.style.animationName = "anBlack";
+                        e.target.style.animationDuration = "1s";
+                        e.target.style.animationFillMode = "forwards";
+                        var i = parseInt(e.target.id[2])*10+parseInt(e.target.id[3]);
+                        var j = parseInt(e.target.id[4])*10+parseInt(e.target.id[5]);
+                        matrix[i][j] = -1;
+                    }
+                    */
+
                 var n = parseInt(e.target.id[2]) * 10 + parseInt(e.target.id[3]);
                 var m = parseInt(e.target.id[4]) * 10 + parseInt(e.target.id[5]);
                 if (n != 1 && n != 2 && n != 19 && n != 20 && m != 1 && m != 2 && m != 19 && m != 20 && (isRun === false || isStop ===true) && matrix[n][m] == 0)
                 {
-
                 if(start === true && isRun === false)
                 {
                     if(previous1 != null)
@@ -169,7 +185,7 @@
                     jFinal = j;
                     previous2 = e.target;
                 }
-                else if(wall === true)
+                /*else if(wall === true)
                 {
                     e.target.style.animationName = "anBlack";
                     e.target.style.animationDuration = "1s";
@@ -177,11 +193,34 @@
                     var i = parseInt(e.target.id[2])*10+parseInt(e.target.id[3]);
                     var j = parseInt(e.target.id[4])*10+parseInt(e.target.id[5]);
                     matrix[i][j] = -1;
-                }
+                }*/
 
                 }
             }
             var previousStart = null, previousFinish = null, previousWall = null;
+
+            function handleMouseDown(e)
+            {
+                if (wall == true)
+                {
+                    isHold = true;
+                    
+                    e.target.style.animationName = "anBlack";
+                    e.target.style.animationDuration = "1s";
+                    e.target.style.animationFillMode = "forwards";
+                    var i = parseInt(e.target.id[2])*10+parseInt(e.target.id[3]);
+                    var j = parseInt(e.target.id[4])*10+parseInt(e.target.id[5]);
+                    matrix[i][j] = -1;
+                }
+                else 
+                isHold = false;
+            }
+
+            function handleMouseUp(e)
+            {
+                isHold = false;
+            }
+
             function handleMouseOver(e)
             {
                 e.preventDefault();
@@ -189,6 +228,27 @@
                 var m = parseInt(e.target.id[4]) * 10 + parseInt(e.target.id[5]);
                 if (n != 1 && n != 2 && n != 19 && n != 20 && m != 1 && m != 2 && m != 19 && m != 20 && (isRun === false || isStop === true )) 
                 {
+                            var i = parseInt(e.target.id[2])*10+parseInt(e.target.id[3]);
+                            var j = parseInt(e.target.id[4])*10+parseInt(e.target.id[5]);
+                    if (wall === true && matrix[i][j] == 0)
+                    {
+                        if (isHold === true)
+                        {
+                            e.target.style.animationName = "anBlack";
+                            e.target.style.animationDuration = "1s";
+                            e.target.style.animationFillMode = "forwards";
+                            var i = parseInt(e.target.id[2])*10+parseInt(e.target.id[3]);
+                            var j = parseInt(e.target.id[4])*10+parseInt(e.target.id[5]);
+                            matrix[i][j] = -1;
+                        }
+                        else if (isHold === false)
+                        {
+                            if(previousWall != null)
+                                previousWall.style.backgroundColor = "white";
+                            e.target.style.backgroundColor = "black";
+                            previousWall = e.target;
+                        }
+                    }
                 if(start === true && e.target.style.backgroundColor != "black" && e.target.style.backgroundColor != "yellow" && isRun === false)
                 {
                     if(previousStart != null)
@@ -208,13 +268,14 @@
                     e.target.style.backgroundColor = "red";
                     previousFinish = e.target;
                 }
-                else if(wall === true && e.target.style.backgroundColor != "black" && e.target.style.backgroundColor != "yellow")
+                /*else if(wall === true && e.target.style.backgroundColor != "black" && e.target.style.backgroundColor != "yellow")
                 {
                     if(previousWall != null)
                         previousWall.style.backgroundColor = "white";
                     e.target.style.backgroundColor = "black";
                     previousWall = e.target;
                 }
+                */
 
                 }
             }
@@ -372,7 +433,7 @@
                     var j = 0;
                     return ([r.map(c => {
                         j++;
-                        return <button id={"id"+parseInt(i/10)+i%10+parseInt(j/10)+j%10} onClick={handleClick} onMouseOver={handleMouseOver}></button>
+                        return <button id={"id"+parseInt(i/10)+i%10+parseInt(j/10)+j%10} onClick={handleClick} onMouseOver={handleMouseOver} onMouseDown = {handleMouseDown} onMouseUp = {handleMouseUp}></button>
                     }),
                     <br/>,
                 ])
